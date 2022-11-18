@@ -2,9 +2,21 @@ import React from 'react';
 import './TodoSearch.css';
 
 function TodoSearch() {
-  return (
-    <input className="TodoSearch" placeholder="Cebolla" />
-  );
+
+  const [patito, setPatito] = React.useState('Juan');
+
+  // const onSearchValueChange = (event) => {
+  //   console.log(event.target.value);
+  // };
+
+  return [
+    <input
+    className="TodoSearch" 
+    placeholder="Cebolla"
+    onChange={()=> setPatito('Enrique')} 
+    />,
+    <p>{patito}</p>
+  ];
 }
 
 export { TodoSearch };

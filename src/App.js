@@ -4,8 +4,8 @@ import { TodoSearch } from "./TodoSearch.js";
 import { TodoList } from "./TodoList.js";
 import { TodoItem } from "./TodoItem.js";
 import { CreateTodoButton } from "./CreateTodoButton.js";
+import './App.css';
 
-// import './App.css';
 const todos = [
   {text: 'Cortar cebolla', completed: false},
   {text: 'Tomar curso introductorio', completed: false},
