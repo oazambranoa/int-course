@@ -1,49 +1,55 @@
 import React from 'react'
 import { TodoCounter } from "../TodoCounter";
+import { TodoContext } from '../TodoContext';
 import { TodoSearch } from "../TodoSearch/index.js";
 import { TodoList } from "../TodoList/index.js";
 import { TodoItem } from "../TodoItem/index.js";
 import { CreateTodoButton } from "../CreateTodoButton/index.js";
 import './App.css';
+import { Modal } from '../modal'
+import { TodoForm } from '../TodoForm'
 
-function AppUI({
-    loading,
-    error,
-    totalTodos,
-    completedTodos,
-    searchValue,
-    setSearchValue,
-    searchedTodos,
+function AppUI() {
+
+  const {
+    error, 
+    loading, 
+    searchedTodos, 
     completeTodo,
-    deleTodo,
-}) {
+    openModal,
+    setOpenModal,
+    deleTodo} = React.useContext(TodoContext)
+
   return (
     <React.Fragment>
-    <TodoCounter 
-      total = {totalTodos}
-      completed = {completedTodos}
-    />    
-    <TodoSearch
-      searchValue={searchValue}
-      setSearchValue={setSearchValue}    
-    />
-    <TodoList>
-      {loading && <p>Estamos cargando</p>}
-      {error && <p>Hubo un error...</p>}
-      {(!loading && searchedTodos.length) && <p>Crea tu primer TODO</p>}
+      <TodoCounter />    
+      <TodoSearch />
+      <TodoList>
+        {loading && <p>Estamos cargando</p>}
+        {error && <p>Hubo un error...</p>}
+        {(!loading && searchedTodos.length) && <p>Crea tu primer TODO</p>}
+
+        {searchedTodos.map(todo =>(
+          <TodoItem 
+            key={todo.text} 
+            text ={todo.text}
+            completed = {todo.completed}
+            onComplete ={() => completeTodo(todo.text)}
+            onDelete ={() => deleTodo(todo.text)}
+          />
+            ))}
+        </TodoList>
+        
+          {!!openModal && (
+            <Modal>
+              <TodoForm />
+            </Modal>
+          )}
 
 
-      {searchedTodos.map(todo =>(
-      <TodoItem 
-      key={todo.text} 
-      text ={todo.text}
-      completed = {todo.completed}
-      onComplete ={() => completeTodo(todo.text)}
-      onDelete ={() => deleTodo(todo.text)}
-      />
-      ))}
-    </TodoList>
-    <CreateTodoButton />      
+      <CreateTodoButton 
+        setOpenModal= {setOpenModal}
+      />      
  </React.Fragment>
   );
 }
