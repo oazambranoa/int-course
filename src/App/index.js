@@ -8,6 +8,9 @@ import { TodoForm } from '../TodoForm'
 import { TodoHeader } from '../TodoHeader';
 import { TodoCounter } from '../TodoCounter'
 import { TodoSearch } from '../TodoSearch'
+import { TodosError } from '../TodoError/index.js';
+import { TodosLoading } from '../TodosLoading/index.js';
+import { EmptyTodos } from '../EmptyTodos'
 
 
 function App() {
@@ -31,7 +34,7 @@ function App() {
 
     return (
       <React.Fragment>
-        <TodoHeader>
+        <TodoHeader loading={loading}>
           <TodoCounter 
             totalTodos = {totalTodos}
             completedTodos = {completedTodos}
@@ -41,22 +44,39 @@ function App() {
             setSearchValue = {setSearchValue}
           />
         </TodoHeader>
-  
-        <TodoList>
-          {loading && <p>Estamos cargando</p>}
-          {error && <p>Hubo un error...</p>}
-          {(!loading && searchedTodos.length) && <p>Crea tu primer TODO</p>}
-  
-          {searchedTodos.map(todo =>(
+
+
+        <TodoList
+          error={error}
+          loading={loading}
+          searchedTodos={searchedTodos}
+          searchText = {searchValue}
+          totalTodos ={totalTodos}
+          onError = {() => <TodosError /> }
+          onLoading = {() => <TodosLoading/>}
+          onEmptyTodos = {() => <EmptyTodos />}
+          onEmptySearchResults = {(searchText) => <p>No hay resultados {searchText}</p>}
+
+          // render = {todo => (
+          //   <TodoItem 
+          //   key={todo.text} 
+          //   text ={todo.text}
+          //   completed = {todo.completed}
+          //   onComplete ={() => completeTodo(todo.text)}
+          //   onDelete ={() => deleTodo(todo.text)}
+          //   />
+          // )}
+        >
+          {todo => (
             <TodoItem 
-              key={todo.text} 
-              text ={todo.text}
-              completed = {todo.completed}
-              onComplete ={() => completeTodo(todo.text)}
-              onDelete ={() => deleTodo(todo.text)}
+            key={todo.text} 
+            text ={todo.text}
+            completed = {todo.completed}
+            onComplete ={() => completeTodo(todo.text)}
+            onDelete ={() => deleTodo(todo.text)}
             />
-              ))}
-          </TodoList>
+          )}
+        </TodoList>
           
             {!!openModal && (
               <Modal>
